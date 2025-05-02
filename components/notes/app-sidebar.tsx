@@ -3,6 +3,7 @@
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -13,10 +14,16 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import { FileText, Plus, Trash2 } from 'lucide-react';
+import { ChevronsUpDown, FileText, Plus, Trash2, User } from 'lucide-react';
 import { useState } from 'react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu';
 
 const mockPages = [
   {
@@ -24,11 +31,11 @@ const mockPages = [
     name: 'tech',
   },
   {
-    id: '3',
+    id: '2',
     name: 'college',
   },
   {
-    id: '4',
+    id: '3',
     name: 'gf',
   },
 ];
@@ -36,6 +43,9 @@ const mockPages = [
 export function AppSidebar() {
   const [pages, setPages] = useState(mockPages);
   const [newPageTitle, setNewPageTitle] = useState('');
+
+  // Todo - get session from auth
+  const session = true;
 
   const handleAddPage = () => {
     if (!newPageTitle.trim()) return;
@@ -108,6 +118,40 @@ export function AppSidebar() {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter>
+        <SidebarGroup>
+          {session ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild className="cursor-pointer ring-0">
+                <SidebarMenuButton className="w-full justify-between gap-3 h-12">
+                  <div className="flex items-center gap-2">
+                    <User className="h-5 w-5 rounded-md" />
+                    <div className="flex flex-col items-start">
+                      <span className="text-sm font-medium">John Doe</span>
+                      <span className="text-xs text-muted-foreground">
+                        john@example.com
+                      </span>
+                    </div>
+                  </div>
+                  <ChevronsUpDown className="h-5 w-5 rounded-md" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuItem>Sign out</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button
+              onClick={() => console.log('add auth  ')}
+              className="w-full"
+            >
+              Sign In
+            </Button>
+          )}
+        </SidebarGroup>
+      </SidebarFooter>
     </Sidebar>
   );
 }
